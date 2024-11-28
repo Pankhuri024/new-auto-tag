@@ -13,36 +13,43 @@ app = Flask(__name__)
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
 
-# Function to analyze text using AI
-def analyze_text_with_ai(text, keyword_list, category_name):
+# Function to use AI for matching keywords from a list to the summary
+def match_keywords_with_ai(summary, keyword_list, category_name):
     try:
+        # Construct a prompt for the AI to match the keywords from the list to the summary
         prompt = f"""
-        Analyze the following text and extract only the most relevant keywords or phrases related to {category_name} from this list: {', '.join(keyword_list)}.
+        From the following text, identify which of these keywords are mentioned. The list of keywords is related to {category_name}. 
+        Only include the keywords that are present in the text.
 
-        Text: "{text}"
+        Text: "{summary}"
 
-        Return a list of the most relevant keywords. Do not return more than five keywords.
+        Keywords: {', '.join(keyword_list)}
+
+        Return a list of keywords from the provided list that appear in the text.
         """
         
-        # Using the new API method for completions (openai.chat_completions is for newer versions)
+        # Requesting AI to check which keywords are in the summary
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",  # Or the model you prefer
-            messages=[{"role": "system", "content": "You are a helpful assistant."},
-                      {"role": "user", "content": prompt}],
-            max_tokens=100,
+            model="gpt-3.5-turbo",  # You can also use other models
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=150,
             temperature=0.7,
         )
 
         result = response['choices'][0]['message']['content'].strip()
         
         if result:
-            # Clean the result and return as list of keywords
+            # Clean and return the keywords in a list
             return [keyword.strip() for keyword in result.split(',') if keyword.strip()]
         else:
             return []
     except Exception as e:
         print(f"Error: {str(e)}")
         return []
+
 
 
 @app.route('/process_insight', methods=['POST'])
@@ -62,13 +69,13 @@ def process_insight():
         if not summary:
             return jsonify({"error": "Summary text is required"}), 400
 
-         # Use AI to analyze the text and extract relevant keywords
-        selected_categories = analyze_text_with_ai(summary, categories, "categories")
-        selected_elements = analyze_text_with_ai(summary, elements, "elements")
-        selected_tools = analyze_text_with_ai(summary, tools, "tools")
-        selected_goals = analyze_text_with_ai(summary, goals, "goals")
-        selected_research_types = analyze_text_with_ai(summary, research_types, "research types")
-        selected_industries = analyze_text_with_ai(summary, industries, "industries")
+        # Use AI to match keywords for each category
+        selected_categories = match_keywords_with_ai(summary, categories, "categories")
+        selected_elements = match_keywords_with_ai(summary, elements, "elements")
+        selected_tools = match_keywords_with_ai(summary, tools, "tools")
+        selected_goals = match_keywords_with_ai(summary, goals, "goals")
+        selected_research_types = match_keywords_with_ai(summary, research_types, "research types")
+        selected_industries = match_keywords_with_ai(summary, industries, "industries")
 
         # Return the auto-selected values
         return jsonify({
