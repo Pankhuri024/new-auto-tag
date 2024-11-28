@@ -52,16 +52,35 @@ def process_insight():
     try:
         data = request.get_json()
         summary = data.get('summary', '')  # Default to empty string if not provided
+        
+        # Extract all keyword categories from the request
         categories = data.get('categories', [])
+        elements = data.get('elements', [])
+        tools = data.get('tools', [])
+        goals = data.get('goals', [])
+        research_types = data.get('research_types', [])
+        industries = data.get('industries', [])
 
         if not summary:
             return jsonify({"error": "Summary text is required"}), 400
 
         # Use AI to match keywords for each category
         selected_categories = match_keywords_with_ai(summary, categories)
+        selected_elements = match_keywords_with_ai(summary, elements)
+        selected_tools = match_keywords_with_ai(summary, tools)
+        selected_goals = match_keywords_with_ai(summary, goals)
+        selected_research_types = match_keywords_with_ai(summary, research_types)
+        selected_industries = match_keywords_with_ai(summary, industries)
 
         # Return the selected keywords
-        return jsonify({"selected_categories": selected_categories})
+        return jsonify({
+            "selected_categories": selected_categories,
+            "selected_elements": selected_elements,
+            "selected_tools": selected_tools,
+            "selected_goals": selected_goals,
+            "selected_research_types": selected_research_types,
+            "selected_industries": selected_industries,
+        })
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
