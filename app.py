@@ -1,9 +1,6 @@
 import os
 from flask import Flask, request, jsonify
 import openai
-import logging
-
-logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 
@@ -12,7 +9,7 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 
 
 # Function to use AI for matching keywords from a list to the summary
-def match_keywords_with_ai(summary, keyword_list, category_name):
+def match_keywords_with_ai(summary, keyword_list):
     try:
         # Construct a prompt to ask AI to match only the relevant keywords
         prompt = f"""
@@ -55,35 +52,16 @@ def process_insight():
     try:
         data = request.get_json()
         summary = data.get('summary', '')  # Default to empty string if not provided
-
-        # Use the predefined values if they are not passed in the request
-        goals = data.get('goals', [])
         categories = data.get('categories', [])
-        tools = data.get('tools', [])
-        elements = data.get('elements', [])
-        research_types = data.get('research_types', [])
-        industries = data.get('industries', [])
 
         if not summary:
             return jsonify({"error": "Summary text is required"}), 400
 
         # Use AI to match keywords for each category
-        selected_categories = match_keywords_with_ai(summary, categories, "categories")
-        selected_elements = match_keywords_with_ai(summary, elements, "elements")
-        selected_tools = match_keywords_with_ai(summary, tools, "tools")
-        selected_goals = match_keywords_with_ai(summary, goals, "goals")
-        selected_research_types = match_keywords_with_ai(summary, research_types, "research types")
-        selected_industries = match_keywords_with_ai(summary, industries, "industries")
+        selected_categories = match_keywords_with_ai(summary, categories)
 
         # Return the selected keywords
-        return jsonify({
-            "selected_categories": selected_categories,
-            "selected_elements": selected_elements,
-            "selected_tools": selected_tools,
-            "selected_goals": selected_goals,
-            "selected_research_types": selected_research_types,
-            "selected_industries": selected_industries,
-        })
+        return jsonify({"selected_categories": selected_categories})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
