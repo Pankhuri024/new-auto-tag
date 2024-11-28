@@ -11,9 +11,9 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 # Function to use AI for matching keywords from a list to the summary
 def match_keywords_with_ai(summary, keyword_list):
     try:
-        # Construct a prompt to ask AI to match only the relevant keywords
+        # Construct a prompt to ask AI to match relevant keywords
         prompt = f"""
-        From the following text, identify which of these keywords are mentioned. Only return the keywords that appear in the text. Do not add any additional explanations or text.
+        From the following text, identify which of these keywords are mentioned. Only return the keywords that appear in the text (even if partially). Do not add any additional explanations or text.
 
         Text: "{summary}"
 
@@ -24,7 +24,7 @@ def match_keywords_with_ai(summary, keyword_list):
         
         # Requesting AI to check which keywords are in the summary
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",  # You can also use other models
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": prompt}
@@ -35,9 +35,8 @@ def match_keywords_with_ai(summary, keyword_list):
 
         result = response['choices'][0]['message']['content'].strip()
         
-        # Clean and return the keywords as a list, ensuring no empty results
+        # Clean and return the keywords as a list
         if result:
-            # Split the keywords by commas and clean up any extra spaces
             keywords = [keyword.strip() for keyword in result.split(',') if keyword.strip()]
             return keywords
         else:
