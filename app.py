@@ -37,9 +37,12 @@ def match_keywords_with_ai(summary, keyword_list):
         
         # Clean and return the keywords as a list, ensuring no empty results
         if result:
-            # Split the keywords by commas and clean up any extra spaces
-            keywords = [keyword.strip() for keyword in result.split(',') if keyword.strip()]
-            return keywords
+            # Split and clean keywords from the AI response
+            ai_keywords = [keyword.strip() for keyword in result.split(',') if keyword.strip()]
+            
+            # Only include keywords that are in the original keyword_list
+            filtered_keywords = [kw for kw in ai_keywords if kw in keyword_list]
+            return filtered_keywords
         else:
             return []
     except Exception as e:
