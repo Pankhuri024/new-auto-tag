@@ -11,43 +11,44 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 # Function to use AI for matching keywords from a list to the summary
 def match_keywords_with_ai(summary, keyword_list):
     try:
-        # Construct a prompt to ask AI to match only the relevant keywords
+        # Construct a strict prompt
         prompt = f"""
-        From the following text, identify which of these keywords are mentioned. Only return the keywords that appear in the text (even if partially) or in keyword list. Do not add any additional explanations or text.
+        From the following text, identify which of these keywords are explicitly mentioned or closely match phrases in the text. Return only the keywords that appear in the text. Do not infer or guess relevance.
 
         Text: "{summary}"
 
         Keywords: {', '.join(keyword_list)}
 
-        Return only the keywords that appear in the text, separated by commas.
+        Return only the keywords that explicitly appear, separated by commas.
         """
         
         # Requesting AI to check which keywords are in the summary
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",  # You can also use other models
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": prompt}
             ],
             max_tokens=150,
-            temperature=0.7,
+            temperature=0,  # Lower temperature for deterministic responses
         )
 
         result = response['choices'][0]['message']['content'].strip()
         
-        # Clean and return the keywords as a list, ensuring no empty results
+        # Clean and filter AI output
         if result:
-            # Split and clean keywords from the AI response
-            ai_keywords = [keyword.strip() for keyword in result.split(',') if keyword.strip()]
-            
-            # Only include keywords that are in the original keyword_list
-            filtered_keywords = [kw for kw in ai_keywords if kw in keyword_list]
+            ai_keywords = [kw.strip() for kw in result.split(',') if kw.strip()]
+            filtered_keywords = [
+                kw for kw in ai_keywords
+                if kw in keyword_list or any(k in summary.lower() for k in kw.lower().split())
+            ]
             return filtered_keywords
         else:
             return []
     except Exception as e:
         print(f"Error: {str(e)}")
         return []
+
 
 
 @app.route('/process_insight', methods=['POST'])
