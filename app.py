@@ -9,29 +9,29 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 
 
 # Function to use AI for matching keywords from a list to the summary
-def match_keywords_with_ai(summary, keyword_list):
+def match_keywords_with_ai(summary, elements):
     try:
         # Construct a strict prompt
-        print("keyword_list", keyword_list)
+        print("keyword_list", elements)
         
+       
         prompt = f"""
-        You are a text analysis assistant. I will provide a text and a list of keywords. Your task is to extract only those words or phrases from the text that exactly match any item in the given list of keywords. Always follow the given rules:
+        You are a text analysis assistant. Your task is to extract words or phrases from the given text that match exactly with the provided list of elements. Always follow the strict rules mentioned below:
 
         ### Input:
-        Text: "{summary}"
+        Summary: "{summary}"
 
-        Keywords: {', '.join(keyword_list)}
+        Elements: {', '.join(elements)}
 
         ### Strict Rules:
-        1. Extract words or phrases only if they **exactly match** items in the keyword list and also appear in the text.
-        2. Matches must be **case-insensitive** but otherwise must be exact (no partial matches, substrings, or inferred context).
-        3. Ignore keywords that do not appear **word-for-word** in the text, considering spaces and punctuation.
-        4. If none of the keywords match the text, return an empty response (blank).
-        5. Do not infer meaning or select keywords based on context or relatedness.
-        6. If a keyword does not explicitly appear in the text, ignore it.
+        1. Extract only those words or phrases that appear in both the *Summary* and *Elements* list exactly as written.
+        2. Matching should be *case-insensitive* but must otherwise be exact. No partial matches or substrings are allowed.
+        3. If a word from the *Elements* list is not explicitly found in the *Summary*, it should be ignored.
+        4. Return the matching words as a comma-separated list, or an empty response if no matches are found.
+        5. Do not infer meaning or select words based on context.
 
         ### Output:
-        Provide only the exact matching keywords as a comma-separated list, with no extra words or explanations. If no matches are found, return an empty response (blank).
+        Provide the extracted words as a comma-separated list without any additional words or explanations. If no matches are found, return an empty response.
         """
 
 
