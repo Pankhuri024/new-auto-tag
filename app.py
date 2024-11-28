@@ -11,43 +11,47 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 # Function to use AI for matching keywords from a list to the summary
 def match_keywords_with_ai(summary, keyword_list):
     try:
-        # Construct a strict prompt
+        # Construct a strict prompt to prevent inference
         prompt = f"""
-        From the following text, identify which of these keywords are explicitly mentioned or closely match phrases in the text. Return only the keywords that appear in the text or in the keyword list. Do not infer or guess relevance.
+        Identify which of these keywords are explicitly mentioned or partially matched in the given text. Return only the keywords from the provided list that are explicitly mentioned or partially matched in the text. Do not infer or guess relevance.
 
         Text: "{summary}"
 
         Keywords: {', '.join(keyword_list)}
 
-        Return only the keywords that explicitly appear, separated by commas.
+        Return only the keywords explicitly mentioned or partially matched, separated by commas. Do not add extra text.
         """
         
-        # Requesting AI to check which keywords are in the summary
+        # Request AI for matches
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system", "content": "You are a strict and accurate assistant."},
                 {"role": "user", "content": prompt}
             ],
             max_tokens=150,
-            temperature=0,  # Lower temperature for deterministic responses
+            temperature=0,  # Strict, deterministic behavior
         )
 
+        # AI response
         result = response['choices'][0]['message']['content'].strip()
-        
-        # Clean and filter AI output
+
+        # Log the raw response for debugging
+        print("AI Raw Response:", result)
+
+        # Split and clean the response
         if result:
             ai_keywords = [kw.strip() for kw in result.split(',') if kw.strip()]
-            filtered_keywords = [
-                kw for kw in ai_keywords
-                if kw in keyword_list or any(k in summary.lower() for k in kw.lower().split())
-            ]
+
+            # Ensure only valid keywords from the list are returned
+            filtered_keywords = [kw for kw in ai_keywords if kw in keyword_list]
             return filtered_keywords
         else:
             return []
     except Exception as e:
         print(f"Error: {str(e)}")
         return []
+
 
 
 
