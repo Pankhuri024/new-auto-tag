@@ -46,8 +46,7 @@ def match_keywords_with_ai(summary, keyword_list):
             ]
             return filtered_keywords
         
-         # Log the raw response for debugging
-        print("AI Raw Response:", filtered_keywords)
+        
         else:
             return []
     except Exception as e:
