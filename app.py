@@ -13,8 +13,7 @@ def match_keywords_with_ai(summary, keyword_list):
     try:
         # Construct a strict prompt
         prompt = f"""
-        Identify only the keywords from the given list that are mentioned (explicitly or partially) in the text. Do not infer or create new keywords.
-
+        I have a list of keywords. I will provide a text, and I need you to extract only those words from the text that match any item in the given lists. Do not add, modify, or include anything extra. If none of the words from the lists match, return a blank response.
         Text: "{summary}"
 
         Keywords: {', '.join(keyword_list)}
