@@ -2,6 +2,9 @@ import os
 from flask import Flask, request, jsonify
 import openai
 from urllib.parse import quote as url_quote
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 app = Flask(__name__)
