@@ -16,7 +16,7 @@ def analyze_text_with_ai(text, keyword_list, category_name):
 
         Text: "{text}"
 
-        Return a list of the most relevant keywords.
+        Return a list of the most relevant keywords. Do not return more than five keywords.
         """
         response = openai.Completion.create(
             engine="text-davinci-003",
@@ -26,11 +26,18 @@ def analyze_text_with_ai(text, keyword_list, category_name):
             stop=None,
             temperature=0.7,
         )
+        
         result = response['choices'][0]['text'].strip()
-        # Convert the result to a Python list
-        return result.split(", ") if result else []
+        
+        if result:
+            # Check if the result looks like a list and clean it up
+            return [keyword.strip() for keyword in result.split(',') if keyword.strip()]
+        else:
+            return []
     except Exception as e:
+        print(f"Error: {str(e)}")
         return []
+
 
 @app.route('/process_insight', methods=['POST'])
 def process_insight():
