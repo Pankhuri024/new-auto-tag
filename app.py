@@ -17,22 +17,15 @@ def match_keywords_with_ai(summary, elements):
         print("formatted_elements", formatted_elements)
        
         prompt = f"""
-        You are a text analysis assistant. Your task is to extract words or phrases from the given text that match exactly with the provided list of elements. Always follow the strict rules mentioned below:
+        You are a text analysis assistant. Your task is to extract exact matches from the following summary using the provided list of elements.
 
-        ### Input:
         Summary: "{summary}"
 
         Elements: {formatted_elements}
 
-        ### Strict Rules:
-        1. *Extract only those words or phrases* that appear in both the *Summary* and *Elements* list *exactly as written*.
-        2. Matching should be *case-insensitive, but it must be **exact* (i.e., no partial matches, substrings, or inferred context).
-        3. If a word from the *Elements* list is *not explicitly found in the Summary, it should be **ignored*.
-        4. If no matches are found in the *Summary* for any word in the *Elements* list, return an *empty response*.
-        5. *Do not infer meaning or context. Only return those words or phrases from the **Elements* list that *appear exactly in the Summary*.
+        Your task is to **only** return the exact words or phrases from the summary that **exactly match** any of the elements (case-insensitive). If no exact match is found, return an empty string. Do not infer or add anything beyond exact matches. For example, if the summary does not mention "A/B Test", do not return "Data Analysis" or other terms that are not directly present in the summary.
 
-        ### Output:
-        Provide the extracted words as a *comma-separated list* without any additional words or explanations. If no matches are found, return an empty response (blank).
+        Return only the exact matches, comma-separated, and no extra words. If no matches are found, return an empty string.
         """
 
 
