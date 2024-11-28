@@ -12,21 +12,22 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 def match_keywords_with_ai(summary, keyword_list):
     try:
         # Construct a strict prompt
+        
         prompt = f"""
-        You are a strict text-matching assistant. Your sole task is to extract exact matches between a provided text and a list of keywords.  I will provide a text and a list of keywords. 
-        Forget everything you know about meaning or relatedness—your only job is literal matching. Follow these rules:
+        You are a text analysis assistant. I will provide a text and a list of keywords. Your task is to extract only those words or phrases from the text that exactly match any item in the given list of keywords.
+
         ### Input:
         Text: "{summary}"
 
         Keywords: {', '.join(keyword_list)}
 
-        ### Critical Instructions:
-        1. **Match Literally**: Extract only exact words or phrases that appear **exactly as they are** in both the text and the keyword list.
-        2. **No Inference or Context**: Do NOT infer meaning, relatedness, or context. Only select keywords that are explicitly and literally present in the text.
-        3. **Case-Insensitive Matching**: Matches should ignore case but must otherwise be identical (no partial matches, no substrings, and no variations).
-        4. **Strict Filtering**: Do NOT include any keyword unless it appears word-for-word in the text. Any keyword not explicitly found must be ignored.
-        5. **Output Only Matches**: If no matches are found, return an empty response (blank). Provide only the matching keywords as a comma-separated list. Do NOT add explanations or anything extra.
-
+        ### Strict Rules:
+        1. Extract words or phrases only if they **exactly match** items in the keyword list and also appear in the text.
+        2. Matches must be **case-insensitive** but otherwise must be exact (no partial matches, substrings, or inferred context).
+        3. Ignore keywords that do not appear **word-for-word** in the text.
+        4. If none of the keywords match the text, return an empty response (blank).
+        5. Do not infer meaning or select keywords based on context or relatedness.
+        6. If a keyword does not explicitly appear in the text, ignore it.
 
     
 
