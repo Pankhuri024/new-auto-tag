@@ -13,13 +13,21 @@ def match_keywords_with_ai(summary, keyword_list):
     try:
         # Construct a strict prompt
         prompt = f"""
-        I have the following input data containing lists of keywords as well as a text summary. Compare the text summary against the lists and extract only those words or phrases that exactly match any item from the lists. Do not infer meaning or add anything extra. Return the matches grouped under their respective keys, leaving the arrays empty if no matches are found.
+        I have a list of keywords. I will provide a text, and I need you to extract only those exact words or phrases from the text that match any item in the given list of keywords. 
+
+        Rules:
+        1. Match must be **exact** and case-insensitive.
+        2. Do not infer meaning or context—only extract the exact words or phrases present in both the text and the keyword list.
+        3. If no match is found, return a blank response.
+        4. Do not include any words that are not explicitly present in the text and the list.
+
         Text: "{summary}"
 
         Keywords: {', '.join(keyword_list)}
 
-        Return only the matching keywords as a comma-separated list, without explanations.
+        Return only the matching keywords as a comma-separated list, without explanations or extra characters.
         """
+
 
         
         # Requesting AI to check which keywords are in the summary
