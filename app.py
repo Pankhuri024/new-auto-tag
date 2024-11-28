@@ -15,16 +15,18 @@ def match_keywords_with_ai(summary, keyword_list):
         prompt = f"""
         I have a list of keywords. I will provide a text, and I need you to extract only those exact words or phrases from the text that match any item in the given list of keywords. 
 
+        
+        ### Input:
+        Text: "{summary}"
+
+        Keywords: {', '.join(keyword_list)}
+        
         ### Strict Rules:
         1. Extract only words or phrases that are **exactly present** in both the text and the keyword list.
         2. Matches must be **case-insensitive**, but must otherwise be exact (no partial matches or inferences).
         3. Do **not infer meaning, context, or similarity**. Only match the exact text as it appears.
         4. If there are no matches, return an empty response (blank).
 
-        ### Input:
-        Text: "{summary}"
-
-        Keywords: {', '.join(keyword_list)}
 
         ### Output:
         Provide only the matching keywords as a comma-separated list, **nothing else**. If no matches are found, return an empty response without explanations.
