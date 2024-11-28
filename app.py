@@ -16,7 +16,7 @@ def match_keywords_with_ai(summary, keyword_list):
         You are a text analysis assistant. I will provide a text and a list of keywords. Your task is to extract only those words or phrases from the text that exactly match any item in the given list of keywords.
 
         ### Strict Rules:
-        1. Extract words or phrases only if they **exactly appear** in the text and also exist in the keyword list.
+        1. Extract words or phrases only if they **exactly appear** in the text and also exist in the keywords.
         2. Matches must be **case-insensitive** but must otherwise be exact (no partial matches, substrings, or inferred context).
         3. Ignore keywords that do not appear **word-for-word** in the text.
         4. If none of the keywords match the text, return an empty response (blank).
