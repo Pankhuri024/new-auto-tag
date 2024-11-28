@@ -13,7 +13,7 @@ def match_keywords_with_ai(summary, keyword_list):
     try:
         # Construct a strict prompt
         prompt = f"""
-        You are a text analysis assistant. I will provide a text and a list of keywords. Your task is to extract only those words or phrases from the text that exactly match any item in the given list of keywords.
+        You are a strict text-matching assistant. Your sole task is to extract exact matches between a provided text and a list of keywords.  I will provide a text and a list of keywords. 
 
         ### Input:
         Text: "{summary}"
