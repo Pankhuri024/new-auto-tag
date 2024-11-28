@@ -25,16 +25,15 @@ def match_keywords_with_ai(summary, keyword_list):
         ### Strict Rules:
         1. Extract words or phrases only if they **exactly match** items in the keyword list and also appear in the text.
         2. Matches must be **case-insensitive** but otherwise must be exact (no partial matches, substrings, or inferred context).
-        3. Ignore keywords that do not appear **word-for-word** in the text.
+        3. Ignore keywords that do not appear **word-for-word** in the text, considering spaces and punctuation.
         4. If none of the keywords match the text, return an empty response (blank).
         5. Do not infer meaning or select keywords based on context or relatedness.
         6. If a keyword does not explicitly appear in the text, ignore it.
 
-    
-
         ### Output:
-        Provide only the exact matching keywords as a comma-separated list, with no extra words or explanations. If no matches are found, return an empty response (blank).Ignore keywords that do not appear **word-for-word** in the text.
+        Provide only the exact matching keywords as a comma-separated list, with no extra words or explanations. If no matches are found, return an empty response (blank).
         """
+
 
 
 
