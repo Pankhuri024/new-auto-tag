@@ -56,7 +56,10 @@ def match_keywords_with_ai(summary, keyword_list):
         
         # Clean and filter AI output
         if result:
-            return result
+            matched_keywords = [kw.strip() for kw in result.split(',') if kw.strip()]
+            print("matched_keywords:", matched_keywords)
+            # Ensure only valid keywords from the original list are returned
+            return [kw for kw in matched_keywords if kw in keyword_list]
         return []
     except Exception as e:
         print(f"Error: {str(e)}")
