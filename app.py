@@ -18,19 +18,20 @@ def analyze_text_with_ai(text, keyword_list, category_name):
 
         Return a list of the most relevant keywords. Do not return more than five keywords.
         """
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=prompt,
+        
+        # Using the new API method for completions (openai.chat_completions is for newer versions)
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # Or the model you prefer
+            messages=[{"role": "system", "content": "You are a helpful assistant."},
+                      {"role": "user", "content": prompt}],
             max_tokens=100,
-            n=1,
-            stop=None,
             temperature=0.7,
         )
-        
-        result = response['choices'][0]['text'].strip()
+
+        result = response['choices'][0]['message']['content'].strip()
         
         if result:
-            # Check if the result looks like a list and clean it up
+            # Clean the result and return as list of keywords
             return [keyword.strip() for keyword in result.split(',') if keyword.strip()]
         else:
             return []
