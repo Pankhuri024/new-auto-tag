@@ -13,14 +13,15 @@ def match_keywords_with_ai(summary, keyword_list):
     try:
         # Construct a strict prompt
         prompt = f"""
-        From the following text, identify which of these keywords are explicitly mentioned or closely match phrases in the text. Return only the keywords that appear in the text or in the keyword list. Do not infer or guess relevance.
+        Identify only the keywords from the given list that are mentioned (explicitly or partially) in the text. Do not infer or create new keywords.
 
         Text: "{summary}"
 
         Keywords: {', '.join(keyword_list)}
 
-        Return only the keywords that explicitly appear, separated by commas.
+        Return only the matching keywords as a comma-separated list, without explanations.
         """
+
         
         # Requesting AI to check which keywords are in the summary
         response = openai.ChatCompletion.create(
@@ -39,16 +40,10 @@ def match_keywords_with_ai(summary, keyword_list):
         
         # Clean and filter AI output
         if result:
-            ai_keywords = [kw.strip() for kw in result.split(',') if kw.strip()]
-            filtered_keywords = [
-                kw for kw in ai_keywords
-                if kw in keyword_list or any(k in summary.lower() for k in kw.lower().split())
-            ]
-            return filtered_keywords
-        
-        
-        else:
-            return []
+            matched_keywords = [kw.strip() for kw in result.split(',') if kw.strip()]
+            # Ensure only valid keywords from the original list are returned
+            return [kw for kw in matched_keywords if kw in keyword_list]
+        return []
     except Exception as e:
         print(f"Error: {str(e)}")
         return []
