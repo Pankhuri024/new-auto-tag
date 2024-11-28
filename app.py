@@ -13,7 +13,7 @@ def match_keywords_with_ai(summary, keyword_list):
     try:
         # Construct a strict prompt
         prompt = f"""
-        From the following text, identify which of these keywords are explicitly mentioned or closely match phrases in the text. Return only the keywords that appear in the text. Do not infer or guess relevance.
+        From the following text, identify which of these keywords are explicitly mentioned or closely match phrases in the text. Return only the keywords that appear in the text or in the keyword list. Do not infer or guess relevance.
 
         Text: "{summary}"
 
