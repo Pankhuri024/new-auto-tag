@@ -1,11 +1,9 @@
 import os
 from flask import Flask, request, jsonify
 import openai
-from urllib.parse import quote as url_quote
 import logging
 
 logging.basicConfig(level=logging.INFO)
-
 
 app = Flask(__name__)
 
@@ -16,16 +14,15 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 # Function to use AI for matching keywords from a list to the summary
 def match_keywords_with_ai(summary, keyword_list, category_name):
     try:
-        # Construct a prompt for the AI to match the keywords from the list to the summary
+        # Construct a prompt to ask AI to match only the relevant keywords
         prompt = f"""
-        From the following text, identify which of these keywords are mentioned. The list of keywords is related to {category_name}. 
-        Only include the keywords that are present in the text.
+        From the following text, identify which of these keywords are mentioned. Only return the keywords that appear in the text. Do not add any additional explanations or text.
 
         Text: "{summary}"
 
         Keywords: {', '.join(keyword_list)}
 
-        Return a list of keywords from the provided list that appear in the text.
+        Return only the keywords that appear in the text, separated by commas.
         """
         
         # Requesting AI to check which keywords are in the summary
@@ -41,15 +38,16 @@ def match_keywords_with_ai(summary, keyword_list, category_name):
 
         result = response['choices'][0]['message']['content'].strip()
         
+        # Clean and return the keywords as a list, ensuring no empty results
         if result:
-            # Clean and return the keywords in a list
-            return [keyword.strip() for keyword in result.split(',') if keyword.strip()]
+            # Split the keywords by commas and clean up any extra spaces
+            keywords = [keyword.strip() for keyword in result.split(',') if keyword.strip()]
+            return keywords
         else:
             return []
     except Exception as e:
         print(f"Error: {str(e)}")
         return []
-
 
 
 @app.route('/process_insight', methods=['POST'])
@@ -77,7 +75,7 @@ def process_insight():
         selected_research_types = match_keywords_with_ai(summary, research_types, "research types")
         selected_industries = match_keywords_with_ai(summary, industries, "industries")
 
-        # Return the auto-selected values
+        # Return the selected keywords
         return jsonify({
             "selected_categories": selected_categories,
             "selected_elements": selected_elements,
@@ -89,6 +87,7 @@ def process_insight():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)
