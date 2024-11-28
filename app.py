@@ -13,6 +13,7 @@ def match_keywords_with_ai(summary, elements):
     try:
         # Construct a strict prompt
         print("keyword_list", elements)
+        formatted_elements = ', '.join(elements)
        
         prompt = f"""
         You are a text analysis assistant. Your task is to extract words or phrases from the given text that match exactly with the provided list of elements. Always follow the strict rules mentioned below:
@@ -20,7 +21,7 @@ def match_keywords_with_ai(summary, elements):
         ### Input:
         Summary: "{summary}"
 
-        Elements: {', '.join(elements)}
+        Elements: {formatted_elements}
 
         ### Strict Rules:
         1. *Extract only those words or phrases* that appear in both the *Summary* and *Elements* list *exactly as written*.
