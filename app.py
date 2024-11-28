@@ -13,24 +13,26 @@ def match_keywords_with_ai(summary, keyword_list):
     try:
         # Construct a strict prompt
         prompt = f"""
-        You are a text analysis assistant. Your task is to extract only exact matches between a provided text and a list of keywords.
-
-        ### Rules:
-        1. Extract words or phrases **exactly** as they appear in both the text and the keyword list.
-        2. Matches are **case-insensitive**, but must otherwise be exact (no substrings, partial matches, or inferred context).
-        3. Do not infer meaning or context. If a keyword is not explicitly present in the text, do not include it.
-        4. If no matches are found, return an empty response (leave blank).
-        5. The response must be a **plain, comma-separated list** of the matching keywords. Do not include explanations, prefixes, or suffixes.
-        6. The response must be present in the text or list of keyword.
+        You are a text analysis assistant. I will provide a text and a list of keywords. Your task is to extract only those words or phrases from the text that exactly match any item in the given list of keywords.
 
         ### Input:
         Text: "{summary}"
+
         Keywords: {', '.join(keyword_list)}
 
-        ### Output:
-        Provide only the matching keywords as a comma-separated list. If no matches are found, return an empty response.
-        """
+        ### Critical Instructions:
+        1. **Match Literally**: Extract only exact words or phrases that appear **exactly as they are** in both the text and the keyword list.
+        2. **No Inference or Context**: Do NOT infer meaning, relatedness, or context. Only select keywords that are explicitly and literally present in the text.
+        3. **Case-Insensitive Matching**: Matches should ignore case but must otherwise be identical (no partial matches, no substrings, and no variations).
+        4. **Strict Filtering**: Do NOT include any keyword unless it appears word-for-word in the text. Any keyword not explicitly found must be ignored.
+        5. **Output Only Matches**: If no matches are found, return an empty response (blank). Provide only the matching keywords as a comma-separated list. Do NOT add explanations or anything extra.
 
+
+    
+
+        ### Output:
+        Provide only the exact matching keywords as a comma-separated list, with no extra words or explanations. If no matches are found, return an empty response (blank).
+        """
 
 
 
