@@ -24,14 +24,14 @@ def match_keywords_with_ai(summary, elements):
         Elements: {', '.join(elements)}
 
         ### Strict Rules:
-        1. Extract only those words or phrases that appear in both the *Summary* and *Elements* list exactly as written.
-        2. Matching should be *case-insensitive* but must otherwise be exact. No partial matches or substrings are allowed.
-        3. If a word from the *Elements* list is not explicitly found in the *Summary*, it should be ignored.
-        4. Return the matching words as a comma-separated list, or an empty response if no matches are found.
-        5. Do not infer meaning or select words based on context.
+        1. *Extract only those words or phrases* that appear in both the *Summary* and *Elements* list *exactly as written*.
+        2. Matching should be *case-insensitive, but it must be **exact* (i.e., no partial matches, substrings, or inferred context).
+        3. If a word from the *Elements* list is *not explicitly found in the Summary, it should be **ignored*.
+        4. If no matches are found in the *Summary* for any word in the *Elements* list, return an *empty response*.
+        5. *Do not infer meaning or context. Only return those words or phrases from the **Elements* list that *appear exactly in the Summary*.
 
         ### Output:
-        Provide the extracted words as a comma-separated list without any additional words or explanations. If no matches are found, return an empty response.
+        Provide the extracted words as a *comma-separated list* without any additional words or explanations. If no matches are found, return an empty response (blank).
         """
 
 
