@@ -21,6 +21,7 @@ def match_keywords_with_ai(summary, keyword_list):
         3. Do not infer meaning or context. If a keyword is not explicitly present in the text, do not include it.
         4. If no matches are found, return an empty response (leave blank).
         5. The response must be a **plain, comma-separated list** of the matching keywords. Do not include explanations, prefixes, or suffixes.
+        6. The response must be present in the text or list of keyword.
 
         ### Input:
         Text: "{summary}"
