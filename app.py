@@ -13,13 +13,13 @@ def match_keywords_with_ai(summary, keyword_list):
     try:
         # Construct a strict prompt
         prompt = f"""
-        From the following text, identify which of these keywords are explicitly mentioned or closely match phrases in the text. Return only the keywords that appear in the text or in the keyword list. Do not infer or guess relevance.
+        From the following text, identify which of these keywords are explicitly mentioned or directly match phrases in the text. Return only the keywords that exactly appear in the text or are partial matches from the list below. Do not infer, guess, or add any new terms.
 
         Text: "{summary}"
 
         Keywords: {', '.join(keyword_list)}
 
-        Return only the keywords that explicitly appear, separated by commas.
+        Return only the keywords explicitly mentioned in the text or partially matched, separated by commas. Do not add extra text.
         """
         
         # Requesting AI to check which keywords are in the summary
@@ -35,6 +35,9 @@ def match_keywords_with_ai(summary, keyword_list):
 
         result = response['choices'][0]['message']['content'].strip()
         
+        # Log the AI response for debugging
+        print("AI Raw Response:", result)
+        
         # Clean and filter AI output
         if result:
             ai_keywords = [kw.strip() for kw in result.split(',') if kw.strip()]
@@ -48,6 +51,7 @@ def match_keywords_with_ai(summary, keyword_list):
     except Exception as e:
         print(f"Error: {str(e)}")
         return []
+
 
 
 
