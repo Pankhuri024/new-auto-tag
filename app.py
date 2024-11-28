@@ -14,7 +14,7 @@ def match_keywords_with_ai(summary, keyword_list):
         # Construct a strict prompt
         prompt = f"""
         You are a strict text-matching assistant. Your sole task is to extract exact matches between a provided text and a list of keywords.  I will provide a text and a list of keywords. 
-
+        Forget everything you know about meaning or relatedness—your only job is literal matching. Follow these rules:
         ### Input:
         Text: "{summary}"
 
