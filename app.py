@@ -12,8 +12,9 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 def match_keywords_with_ai(summary, elements):
     try:
         # Construct a strict prompt
-        print("keyword_list", elements)
+       
         formatted_elements = ', '.join(elements)
+        print("formatted_elements", formatted_elements)
        
         prompt = f"""
         You are a text analysis assistant. Your task is to extract words or phrases from the given text that match exactly with the provided list of elements. Always follow the strict rules mentioned below:
