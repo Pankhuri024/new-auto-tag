@@ -13,26 +13,23 @@ def match_keywords_with_ai(summary, keyword_list):
     try:
         # Construct a strict prompt
         prompt = f"""
-        You are a text analysis assistant. I will provide a text and a list of keywords. Your task is to extract only those words or phrases from the text that exactly match any item in the given list of keywords.
+        You are a text analysis assistant. Your task is to extract only exact matches between a provided text and a list of keywords.
+
+        ### Rules:
+        1. Extract words or phrases **exactly** as they appear in both the text and the keyword list.
+        2. Matches are **case-insensitive**, but must otherwise be exact (no substrings, partial matches, or inferred context).
+        3. Do not infer meaning or context. If a keyword is not explicitly present in the text, do not include it.
+        4. If no matches are found, return an empty response (leave blank).
+        5. The response must be a **plain, comma-separated list** of the matching keywords. Do not include explanations, prefixes, or suffixes.
 
         ### Input:
         Text: "{summary}"
-
         Keywords: {', '.join(keyword_list)}
 
-        ### Strict Rules:
-        1. Extract words or phrases only if they **exactly match** items in the keyword list and also appear in the text.
-        2. Matches must be **case-insensitive** but otherwise must be exact (no partial matches, substrings, or inferred context).
-        3. Ignore keywords that do not appear **word-for-word** in the text.
-        4. If none of the keywords match the text, return an empty response (blank).
-        5. Do not infer meaning or select keywords based on context or relatedness.
-        6. If a keyword does not explicitly appear in the text, ignore it.
-
-    
-
         ### Output:
-        Provide only the exact matching keywords as a comma-separated list, with no extra words or explanations. If no matches are found, return an empty response (blank).
+        Provide only the matching keywords as a comma-separated list. If no matches are found, return an empty response.
         """
+
 
 
 
