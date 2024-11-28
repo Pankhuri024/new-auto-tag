@@ -14,7 +14,7 @@ def match_keywords_with_ai(summary, keyword_list):
         # Construct a strict prompt
         
         prompt = f"""
-        You are a text analysis assistant. I will provide a text and a list of keywords. Your task is to extract only those words or phrases from the text that exactly match any item in the given list of keywords.
+        You are a text analysis assistant. I will provide a text and a list of keywords. Your task is to extract only those words or phrases from the text that exactly match any item in the given list of keywords. Always follow the given rules:
 
         ### Input:
         Text: "{summary}"
