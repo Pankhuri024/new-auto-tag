@@ -31,6 +31,7 @@ def match_keywords_with_ai(summary, elements):
         4. *Do not infer meaning, synonyms, or context* to select keywords. Only perform strict literal matching as per the above rules.
         5. If no matches are found in the *Summary* for any word in the *Elements* list, return an *empty response*.
         6. Your task is strictly to match exact words or phrases. Avoid analyzing the meaning or intent of the text.
+        7. Singular and plural forms of words should be considered as matches (e.g., "image" matches "images" and vice versa).
         ### Output:
         Provide the extracted words as a *comma-separated list* without any additional words or explanations. If no matches are found, return an empty response (blank).
         """
