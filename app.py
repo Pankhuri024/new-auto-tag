@@ -26,10 +26,11 @@ def match_keywords_with_ai(summary, elements):
 
         ### Strict Rules:
         1. *Extract only those words or phrases* that appear in both the *Summary* and *Elements* list *exactly as written*.
-        2. Matching should be *case-insensitive, but it must be **exact* (i.e., no partial matches, substrings, or inferred context).
-        3. If a word from the *Elements* list is *not explicitly found in the Summary, it should be **ignored*.
+        2. Matching should be *case-insensitive, but it must be **exact** (i.e., no partial matches, substrings, or inferred context).
+        3. If a word from the *Elements* list is *not explicitly found in the Summary, it should be **ignored***.
         4. If no matches are found in the *Summary* for any word in the *Elements* list, return an *empty response*.
-        5. *Do not infer meaning or context. Only return those words or phrases from the **Elements* list that *appear exactly in the Summary*.
+        5. *Do not infer meaning or context. Only return those words or phrases from the **Elements** list that *appear exactly in the Summary*.
+        6. If an element consists of multiple words, select it if at least one word (excluding words like "and", "or", "is", "am", "are") from the element matches a word in the Summary. Ignore the element if it only matches non-keywords like "and", "or", "is", etc.
 
         ### Output:
         Provide the extracted words as a *comma-separated list* without any additional words or explanations. If no matches are found, return an empty response (blank).
